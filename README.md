@@ -1,34 +1,109 @@
-# An open-access EEG dataset for speech decoding: Exploring the role of articulation and coarticulation
+# EEG-Voice: Moreira Dataset Exploration
 
+本仓库用于整理 `Moreira et al., 2025` 公开 EEG 语音解码数据集的前期研究材料，重点是数据结构梳理、标签说明、条件关系、描述性统计和后续 `EEG token / speech token` 对齐研究所需的数据边界判断。
 
-João Pedro Carvalho Moreira<sup> 1,#</sup>, Vinícius Rezende Carvalho<sup> 1</sup>, Eduardo Mazoni Andrade Marçal Mendes<sup> 1</sup>, Ariah Fallah<sup> 2</sup>, Terrence J. Sejnowski<sup> 3,4,5</sup>, Claudia Lainscsek<sup> 3,4</sup>, Lindy Comstock<sup> 2,6,*,#</sup><br>
+当前阶段仅处理数据理解与简单统计，不包含模型训练，也不直接开展 `EEG -> voice reconstruction`。
 
-<sup>1</sup> Postgraduate Program in Electrical Engineering, Federal University of Minas Gerais, Belo Horizonte, MG 31270-901, Brazil<br>
-<sup>2</sup> Department of Neurosurgery, University of California, Los Angeles, Los Angeles, CA 90095, USA<br>
-<sup>3</sup> Computational Neurobiology Laboratory, The Salk Institute for Biological Studies, La Jolla, CA 92037, USA<br>
-<sup>4</sup> Institute for Neural Computation University of California San Diego, La Jolla, CA 92093, USA<br>
-<sup>5</sup> Division of Biological Sciences, University of California San Diego, La Jolla, CA 92093, USA<br>
-<sup>6</sup> Department of Linguistics, National Research University Higher School of Economics, Moscow 101000, RF<br>
-<sup>*</sup> Corresponding author(s): Lindy Comstock (lbcomstock@ucla.edu)<br>
-<sup>#</sup> These authors contributed equally to this work
+## 项目范围
 
+当前工作集中在以下内容：
 
-## ABSTRACT
+- 整理 `Moreira 2025` 数据集的任务结构、标签字段和条件变量
+- 标准化本地事件表，生成统一 manifest
+- 验证 `OpenNeuro ds006104 v1.0.1` 的 BIDS 组织与样本文件
+- 给出面向后续研究的数据可用性结论
 
-Electroencephalography (EEG) holds promise for brain-computer interface (BCI) devices as a non-invasive measure of neural
-activity. With increased attention to EEG-based BCI systems, publicly available datasets that can represent the complex
-tasks required for naturalistic speech decoding are necessary to establish a common standard of performance within the
-BCI community. Effective solutions must overcome various kinds of noise in the EEG signal and remain reliable across
-sessions and subjects without overfitting to a specific dataset or task. We present two validated datasets (N=8 and N=16) for
-classification at the phoneme and word level and by the articulatory properties of phonemes. EEG signals were recorded from
-64 channels while subjects listened to and repeated six consonants and five vowels. Individual phonemes were combined
-in different phonetic environments to produce coarticulated variation in forty consonant-vowel pairs, twenty real words, and
-twenty pseudowords. Phoneme pairs and words were presented during a control condition and during transcranial magnetic
-stimulation targeted to inhibit or augment the EEG signal associated with specific articulatory processes.
+当前不包括：
 
-## CODE AVAILABILITY
+- 复杂模型训练
+- `EEG -> mel/voice` 重建实验
+- 基于 imagined speech 的 paired-audio 监督设置
 
-The data and codes used in this work are available at [OSF](https://osf.io/e82p9/) to allow reproducibility and sharing of information under the CC BY 4.0 license (http://creativecommons.org/licenses/by-nc-nd/4.0/). The routines can be found in the Study/EEG_Data_Processing/Code folder. These routines are responsible for the analyses presented in the technical validation section. The results obtained for both signal processing techniques, as discussed in Data Processing section, are placed in the same folder. The same code is available on [GithHub](https://github.com/mcjpedro/speech_decoding) so as to allow for version control and discussion of the implementation and analysis carried out in this work. The routines were built to obtain the ERP using only ICA and signal cleaning was performed using the pipeline described in Figure 1, based on the EEGLab library versions 2022.0 and 2022.1 native to MATLAB.
+## 核心文档
 
-![alt text](https://github.com/mcjpedro/speech_decoding/blob/main/figures/code_structure.png?raw=true)
-**Figure 1** - Code structure to data processing.
+- [数据探索报告](reports/moreira_dataset_exploration_cn.md)
+- [论文解析与概念说明](reports/moreira_paper_data_concepts_cn.md)
+
+## 当前主要结论
+
+- 本地 `24` 份事件表已汇总为统一 manifest：
+  - [exploration_outputs/tables/local_events_manifest.csv](exploration_outputs/tables/local_events_manifest.csv)
+- 数据公开主源已确认对应 `OpenNeuro ds006104 v1.0.1`
+- 当前公开结构支持 `trial-level` 与离散 `unit-level` 对齐准备
+- 当前公开结构不支持直接的 `frame-level` 语音监督
+- 后续更适合从 `speech-unit EEG token` 准备出发，而不是直接进入语音重建
+
+## 重点输出
+
+### 报告
+
+- [reports/moreira_dataset_exploration_cn.md](reports/moreira_dataset_exploration_cn.md)
+- [reports/moreira_paper_data_concepts_cn.md](reports/moreira_paper_data_concepts_cn.md)
+
+### 表格
+
+- [标准化 manifest](exploration_outputs/tables/local_events_manifest.csv)
+- [候选子集优先级](exploration_outputs/data_priority/tables/candidate_subset_priority.csv)
+- [监督信号完备性](exploration_outputs/data_priority/tables/supervision_signal_matrix.csv)
+- [对齐粒度说明](exploration_outputs/data_priority/tables/alignment_granularity.csv)
+- [OpenNeuro 验证结果](exploration_outputs/validation/openneuro_validation.json)
+
+### 图表
+
+- [受试者 trial 数](exploration_outputs/figures/subject_trial_counts.png)
+- [任务分布](exploration_outputs/figures/task_distribution.png)
+- [任务与 TMS 条件关系](exploration_outputs/figures/tms_target_by_task_heatmap.png)
+- [字段缺失统计](exploration_outputs/figures/field_missingness.png)
+- [任务规模与 unique stimuli](exploration_outputs/data_priority/figures/task_size_and_unique_stimuli.png)
+- [候选子集类别平衡](exploration_outputs/data_priority/figures/candidate_subset_balance.png)
+- [2019 vs 2021 phoneme overlap](exploration_outputs/data_priority/figures/phoneme_base_overlap.png)
+- [对齐粒度示意图](exploration_outputs/data_priority/figures/alignment_granularity.png)
+
+## 数据使用判断
+
+现阶段可以明确的判断如下：
+
+- `2021 single-phoneme` 适合做最基础的离散 speech-unit 分析
+- `2021 Words` 可用于较高层级的 lexical unit 观察
+- `control-only phonemes` 是当前最适合做跨条件整理的子集
+- `2019/2021` 共有的 `20` 个 phoneme base units 可用于有限的跨年份比较
+
+从公开结构看，`Moreira` 更适合作为后续 `EEG token` 数据准备的基础，不足以单独作为 `EEG -> voice` 主监督数据。
+
+## 结果再生成
+
+核心脚本：
+
+- [scripts/generate_moreira_exploration.py](scripts/generate_moreira_exploration.py)
+- [scripts/generate_moreira_data_priority.py](scripts/generate_moreira_data_priority.py)
+
+运行方式：
+
+```bash
+python3 scripts/generate_moreira_exploration.py
+python3 scripts/generate_moreira_data_priority.py
+```
+
+输出目录：
+
+- `exploration_outputs/`
+- `exploration_outputs/data_priority/`
+
+## 仓库结构
+
+```text
+.
+├── events_information/        # 本地事件表 CSV
+├── exploration_outputs/       # manifest、表格、图表、验证结果
+├── figures/                   # 原仓库附带图片
+├── matlab_code/               # 原作者 MATLAB 技术验证代码
+├── reports/                   # 中文报告与概念说明
+├── scripts/                   # 数据整理与图表生成脚本
+└── sensors_layout/            # 电极布局信息
+```
+
+## References
+
+- Moreira, J. P. C., Carvalho, V. R., Mendes, E. M. A. M., et al. (2025). *An open-access EEG dataset for speech decoding: Exploring the role of articulation and coarticulation*. Scientific Data.
+- OpenNeuro dataset: `ds006104`
+- Lee et al. (2023). *Towards Voice Reconstruction from EEG during Imagined Speech*.
