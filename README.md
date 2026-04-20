@@ -23,12 +23,14 @@
 
 - [数据探索报告](reports/moreira_dataset_exploration_cn.md)
 - [论文解析与概念说明](reports/moreira_paper_data_concepts_cn.md)
+- [ds006104 本地 BIDS 数据集说明](reports/ds006104_bids_dataset_note_cn.md)
 
 ## 当前主要结论
 
 - 本地 `24` 份事件表已汇总为统一 manifest：
   - [exploration_outputs/tables/local_events_manifest.csv](exploration_outputs/tables/local_events_manifest.csv)
 - 数据公开主源已确认对应 `OpenNeuro ds006104 v1.0.1`
+- 当前工作区已加入本地 `ds006104/` 目录，可直接查看 `participants.tsv`、`events.tsv/json`、`channels.tsv`、`eeg.json`
 - 当前公开结构支持 `trial-level` 与离散 `unit-level` 对齐准备
 - 当前公开结构不支持直接的 `frame-level` 语音监督
 - 后续更适合从 `speech-unit EEG token` 准备出发，而不是直接进入语音重建
@@ -39,6 +41,7 @@
 
 - [reports/moreira_dataset_exploration_cn.md](reports/moreira_dataset_exploration_cn.md)
 - [reports/moreira_paper_data_concepts_cn.md](reports/moreira_paper_data_concepts_cn.md)
+- [reports/ds006104_bids_dataset_note_cn.md](reports/ds006104_bids_dataset_note_cn.md)
 
 ### 表格
 

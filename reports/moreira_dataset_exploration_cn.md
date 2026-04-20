@@ -41,6 +41,42 @@
 - OpenNeuro 验证：`../exploration_outputs/validation/openneuro_validation.json`
 - OpenNeuro 树结构摘录：`../exploration_outputs/validation/openneuro_tree_excerpt.txt`
 
+### 2.1 补充：当前工作区里的 `ds006104/` 到底是什么
+
+现在工作区里新放进来的 `ds006104/`，不是另外一套无关的数据，而是 `OpenNeuro ds006104` 在本地的 `BIDS` 数据目录。
+
+它的作用可以直接理解成：
+
+1. `events_information/` 是前面用于快速汇总分析的本地事件表。
+2. `ds006104/` 是更接近官方公开主数据源的标准目录结构。
+3. 后续如果要从“研究笔记”走向“正式可复现的数据读取”，应该优先以 `ds006104/` 为入口。
+
+当前本地 `ds006104/` 已经能直接看到的内容包括：
+
+- `dataset_description.json`
+- `participants.tsv` 和 `participants.json`
+- `24` 个受试者目录：`sub-P01` 到 `sub-P08`，`sub-S01` 到 `sub-S16`
+- 每个任务对应的 `events.tsv/json`、`channels.tsv`、`eeg.json`
+- `coordsystem.json`
+- `sourcedata/tms_metadata/tms_parameters.json`
+- `derivatives/eeglab/dataset_description.json`
+
+但这里有一个很重要的现实情况：
+
+`当前这个本地目录里还没有真正下载下来的原始 .edf 文件。`
+
+也就是说，这个目录现在更像是：
+
+`一个已经放到本地、但尚未 fully hydrated 的 OpenNeuro/DataLad BIDS 仓库。`
+
+这并不影响当前做数据理解，因为：
+
+- 事件定义已经在 `events.tsv/json` 里
+- 通道和参考信息已经在 `channels.tsv`、`eeg.json` 里
+- 任务、被试和 TMS 元数据也已经齐了
+
+但它会影响更进一步的原始信号分析，因为没有 `.edf` 就还不能直接读取完整 EEG 波形。
+
 ## 3. 这套数据到底长什么样
 
 ### 3.1 受试者与任务
