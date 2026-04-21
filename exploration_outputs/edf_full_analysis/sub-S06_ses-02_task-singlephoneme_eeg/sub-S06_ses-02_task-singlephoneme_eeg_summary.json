@@ -1,0 +1,17 @@
+{
+  "edf_path": "/Users/samxie/Research/EEG-Voice/openneuro_downloads/ds006104-download/sub-S06/ses-02/eeg/sub-S06_ses-02_task-singlephoneme_eeg.edf",
+  "original_sampling_frequency_hz": 2000.0,
+  "analysis_sampling_frequency_hz": 250.0,
+  "eeg_channel_count": 61,
+  "samples_per_channel": 685500,
+  "duration_seconds": 2742.0,
+  "duration_minutes": 45.7,
+  "matrix_shape": [
+    61,
+    685500
+  ],
+  "global_mean_uV": 1.3212785543627903e-05,
+  "global_std_uV": 0.0056977292200428385,
+  "global_min_uV": -0.08161185966156463,
+  "global_max_uV": 0.01692887329449637
+}

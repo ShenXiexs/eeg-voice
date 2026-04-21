@@ -1,0 +1,17 @@
+{
+  "edf_path": "/Users/samxie/Research/EEG-Voice/openneuro_downloads/ds006104-download/sub-S07/ses-02/eeg/sub-S07_ses-02_task-Words_eeg.edf",
+  "original_sampling_frequency_hz": 2000.0,
+  "analysis_sampling_frequency_hz": 250.0,
+  "eeg_channel_count": 61,
+  "samples_per_channel": 696500,
+  "duration_seconds": 2786.0,
+  "duration_minutes": 46.43333333333333,
+  "matrix_shape": [
+    61,
+    696500
+  ],
+  "global_mean_uV": -0.0033307542469002034,
+  "global_std_uV": 0.005822806306878869,
+  "global_min_uV": -0.09050372836692386,
+  "global_max_uV": 0.08629060074684439
+}

@@ -1,0 +1,17 @@
+{
+  "edf_path": "/Users/samxie/Research/EEG-Voice/openneuro_downloads/ds006104-download/sub-P08/ses-01/eeg/sub-P08_ses-01_task-phonemes_eeg.edf",
+  "original_sampling_frequency_hz": 2000.0,
+  "analysis_sampling_frequency_hz": 250.0,
+  "eeg_channel_count": 61,
+  "samples_per_channel": 683250,
+  "duration_seconds": 2733.0,
+  "duration_minutes": 45.55,
+  "matrix_shape": [
+    61,
+    683250
+  ],
+  "global_mean_uV": 0.0017216821746771217,
+  "global_std_uV": 0.005850399153916279,
+  "global_min_uV": -0.0580767189175019,
+  "global_max_uV": 0.020762443743550726
+}
