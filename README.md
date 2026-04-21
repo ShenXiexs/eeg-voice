@@ -21,10 +21,17 @@
 
 ## 核心文档
 
-- [数据探索报告](reports/moreira_dataset_exploration_cn.md)
-- [论文解析与概念说明](reports/moreira_paper_data_concepts_cn.md)
-- [ds006104 本地 BIDS 数据集说明](reports/ds006104_bids_dataset_note_cn.md)
-- [ds006104 事件级数据分析](reports/ds006104_bids_analysis_cn.md)
+- [EEG 数据总手册](reports/eeg_data_all_in_one_cn.md)
+
+这份总手册已经整合了原先分散在多份 `reports/*.md` 里的内容，包括：
+
+- 数据集背景与核心概念
+- BIDS 目录与字段解释
+- 事件级分析结论
+- 数据边界与优先子集
+- 完整 EDF 导出说明
+- EEG token / speech token 研究路线
+- 阅读清单与搜索词
 
 ## 当前主要结论
 
@@ -40,10 +47,7 @@
 
 ### 报告
 
-- [reports/moreira_dataset_exploration_cn.md](reports/moreira_dataset_exploration_cn.md)
-- [reports/moreira_paper_data_concepts_cn.md](reports/moreira_paper_data_concepts_cn.md)
-- [reports/ds006104_bids_dataset_note_cn.md](reports/ds006104_bids_dataset_note_cn.md)
-- [reports/ds006104_bids_analysis_cn.md](reports/ds006104_bids_analysis_cn.md)
+- [EEG 数据总手册](reports/eeg_data_all_in_one_cn.md)
 
 ### 表格
 
@@ -102,7 +106,7 @@ python3 scripts/generate_moreira_data_priority.py
 ├── exploration_outputs/       # manifest、表格、图表、验证结果
 ├── figures/                   # 原仓库附带图片
 ├── matlab_code/               # 原作者 MATLAB 技术验证代码
-├── reports/                   # 中文报告与概念说明
+├── reports/                   # 中文总手册
 ├── scripts/                   # 数据整理与图表生成脚本
 └── sensors_layout/            # 电极布局信息
 ```
