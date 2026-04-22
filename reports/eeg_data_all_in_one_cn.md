@@ -1,31 +1,15 @@
-# EEG 数据总手册
-
-这份手册是 `ref_github/speech_decoding/reports/` 的唯一保留文档。
-
-它整合了此前分散在多份报告里的内容，包括：
-
-- 数据集背景与论文概念
-- 本地 BIDS 数据结构说明
-- 事件级分析结论
-- 数据边界判断
-- EEG 完整导出说明
-- EEG token / speech token 研究路线
-- 阅读清单与检索词
-
-如果只记住一句话，记下面这句就够了：
-
-`这套数据最适合做 speech-unit 级 EEG token 学习与弱监督对齐，不适合直接作为 EEG-to-voice 重建主监督数据集。`
+# EEG 数据说明
 
 ## 1. 项目定位与当前状态
 
 ### 1.1 项目在做什么
 
-本项目围绕 `Moreira et al., 2025` 公开的 EEG speech decoding 数据集展开，重点不是直接做语音重建，而是先把下面几件事讲清楚：
+本项目围绕 `Moreira et al., 2025` 公开的 EEG speech decoding 数据集展开，界定下面几件事：
 
 1. 公开数据结构是什么
 2. 标签和任务层级是什么
 3. 当前数据能支持到哪一层 speech alignment
-4. 哪些子集最适合做后续 `EEG token / speech token` 研究
+4. 哪些子集更适合作为后续 `EEG token / speech token` 研究起点
 
 ### 1.2 当前已经完成到哪一步
 
@@ -50,7 +34,7 @@
 2. 任务是 `听刺激 + 按键辨别`，不是 imagined speech。
 3. 当前公开结构支持 `trial-level` 和部分 `unit-level` 研究。
 4. 当前公开结构不支持 `frame-level` 语音监督，也不支持直接 `EEG -> mel / waveform`。
-5. 最适合先看的子集是：
+5. 优先关注的子集包括：
    - `2021 single-phoneme`
    - `2021 Words`
    - `control-only phonemes`
@@ -61,18 +45,18 @@
 
 ![EEG 数据说明导图](../exploration_outputs/figures/eeg_data_overview_map.svg)
 
-这张图回答：
+这张图对应的问题包括：
 
 1. 数据总体从哪里来
 2. 任务怎么分层
 3. 当前能做什么、不能做什么
-4. 你现在应该从哪里继续往下做
+4. 后续工作路径如何展开
 
 ### 2.2 数据结构说明图
 
 ![EEG 数据结构说明图](../exploration_outputs/figures/eeg_data_structure_map.svg)
 
-这张图回答：
+这张图对应的问题包括：
 
 1. 单个记录目录里有哪些文件
 2. 每个文件分别代表什么
@@ -83,7 +67,7 @@
 这两张图最重要的含义可以压缩成三句：
 
 1. `EDF + sidecars` 是原始定义层。
-2. `summary / PSD / overview` 是体检报告层。
+2. `summary / PSD / overview` 属于描述性摘要层。
 3. `*_full_eeg.h5` 才是当前项目里真正的完整 EEG 数据本体。
 
 ## 3. 数据来源与目录关系
@@ -140,7 +124,7 @@
 - EDF 描述性分析结果
 - 完整 EEG 导出结果
 
-这是当前项目里最直接可用的工作层。
+这是当前项目中最直接可用的工作层。
 
 ### 3.4 代码与说明层
 
@@ -157,16 +141,7 @@
 
 ### 4.1 这篇论文到底是什么
 
-Moreira 2025 的核心不是“提出了最强 EEG 语音模型”，而是：
-
 `作者公开了一套更系统的 EEG speech decoding 数据集，让研究者可以从简单语音单位逐步走向更复杂语音单位。`
-
-所以它更像：
-
-- 数据集论文
-- 数据说明论文
-
-而不是单纯追求 leaderboard 的模型论文。
 
 ### 4.2 这篇论文为什么重要
 
@@ -179,31 +154,31 @@ Moreira 2025 的核心不是“提出了最强 EEG 语音模型”，而是：
 
 ### 4.3 这套实验本质上在做什么
 
-就你当前能直接利用的数据结构来说，这套实验更接近：
+按当前可直接利用的数据结构来看，这套实验更接近：
 
 - 听语音刺激
 - EEG 记录脑反应
 - 被试做辨别 / 按键响应
 - 结合语音标签和 TMS 条件做分析
 
-它不是：
+不是：
 
 - imagined speech paired audio
 - 被试自己说话的配对语音重建数据
 
-### 4.4 必须先懂的概念
+### 4.4 基本概念
 
-#### EEG
+#### [EEG]()
 
 头皮脑电。优点是非侵入、时间分辨率高；缺点是噪声大、空间定位弱。
 
-#### Speech decoding
+#### [Speech decoding]()
 
 不是传统麦克风语音识别，而是：
 
 `从脑信号里推断被试正在处理什么语音单位。`
 
-#### Phoneme
+#### [Phoneme]()
 
 音位。可近似理解成语言里最小的可区分语音单位。
 
@@ -258,7 +233,7 @@ Moreira 2025 的核心不是“提出了最强 EEG 语音模型”，而是：
   - `phonemes`
   - `Words`
 
-Moreira 论文里可以把它们粗略理解成：
+即：
 
 - `2019`: 较早、较小、较基础
 - `2021`: 更完整、更适合开发模型
@@ -270,11 +245,11 @@ Moreira 论文里可以把它们粗略理解成：
 含义：
 
 - 单个语音单位
-- 当前最干净的离散 speech-unit 任务
+- 离散 speech-unit 结构最清晰的任务
 
 真实示例：
 
-- [sub-S01_ses-02_task-singlephoneme_events.tsv](/Users/samxie/Research/EEG-Voice/openneuro_downloads/ds006104-download/sub-S01/ses-02/eeg/sub-S01_ses-02_task-singlephoneme_events.tsv:1)
+- [sub-S01_ses-02_task-singlephoneme_events.tsv](/Users/samxie/Research/EEG-Voice/openneuro_downloads/ds006104-download/sub-S01/ses-02/eeg/sub-S01_ses-02_task-singlephoneme_events.tsv)
 
 示例片段：
 
@@ -287,18 +262,18 @@ Moreira 论文里可以把它们粗略理解成：
 如何理解：
 
 - 每个刺激就是一个音
-- 很适合做分类、embedding、token purity、leave-one-subject-out baseline
+- 可用于分类、embedding、token purity、leave-one-subject-out baseline
 
 #### `phonemes`
 
 含义：
 
 - 双音组合任务
-- 是最适合做小序列和 articulatory 结构分析的一类
+- 适合承载小序列和 articulatory 结构分析
 
 真实示例：
 
-- [sub-P01_ses-01_task-phonemes_events.tsv](/Users/samxie/Research/EEG-Voice/openneuro_downloads/ds006104-download/sub-P01/ses-01/eeg/sub-P01_ses-01_task-phonemes_events.tsv:1)
+- [sub-P01_ses-01_task-phonemes_events.tsv](/Users/samxie/Research/EEG-Voice/openneuro_downloads/ds006104-download/sub-P01/ses-01/eeg/sub-P01_ses-01_task-phonemes_events.tsv)
 
 示例片段：
 
@@ -323,7 +298,7 @@ Moreira 论文里可以把它们粗略理解成：
 
 真实示例：
 
-- [sub-S01_ses-02_task-Words_events.tsv](/Users/samxie/Research/EEG-Voice/openneuro_downloads/ds006104-download/sub-S01/ses-02/eeg/sub-S01_ses-02_task-Words_events.tsv:1)
+- [sub-S01_ses-02_task-Words_events.tsv](/Users/samxie/Research/EEG-Voice/openneuro_downloads/ds006104-download/sub-S01/ses-02/eeg/sub-S01_ses-02_task-Words_events.tsv)
 
 示例片段：
 
@@ -336,7 +311,7 @@ Moreira 论文里可以把它们粗略理解成：
 
 如何理解：
 
-- 当前 BIDS 事件流里 `category` 可以直接拿来区分 `real / nonce`
+- 当前 BIDS 事件流里 `category` 可直接区分 `real / nonce`
 - 但完整 `CVC` 级词结构，不能只靠 BIDS `events.tsv` 恢复
 
 ## 6. 当前仓库与目录怎么读
@@ -441,7 +416,7 @@ openneuro_downloads/ds006104-download/sub-[subject]/ses-[session]/eeg/
 
 - `trial_type=TMS` 表示 TMS 事件
 - `trial_type=stimulus` 表示刺激真正出现的时刻
-- 你后面切 `stimulus-locked epoch` 最重要的时间基准就是这里的 `stimulus onset`
+- 后续切 `stimulus-locked epoch` 的核心时间基准是这里的 `stimulus onset`
 
 ### 7.3 `*_events.json`
 
@@ -476,7 +451,7 @@ openneuro_downloads/ds006104-download/sub-[subject]/ses-[session]/eeg/
 
 真实示例：
 
-- [sub-P01_ses-01_task-phonemes_channels.tsv](/Users/samxie/Research/EEG-Voice/openneuro_downloads/ds006104-download/sub-P01/ses-01/eeg/sub-P01_ses-01_task-phonemes_channels.tsv:1)
+- [sub-P01_ses-01_task-phonemes_channels.tsv](/Users/samxie/Research/EEG-Voice/openneuro_downloads/ds006104-download/sub-P01/ses-01/eeg/sub-P01_ses-01_task-phonemes_channels.tsv)
 
 示例片段：
 
@@ -489,7 +464,7 @@ F7    EEG   uV
 F3    EEG   uV
 ```
 
-这告诉你：
+对应信息包括：
 
 - 标准 EEG 通道有哪些
 - 后面提取数据时哪些是 EEG、哪些不是
@@ -506,7 +481,7 @@ F3    EEG   uV
 
 真实示例：
 
-- [sub-P01_ses-01_task-phonemes_eeg.json](/Users/samxie/Research/EEG-Voice/openneuro_downloads/ds006104-download/sub-P01/ses-01/eeg/sub-P01_ses-01_task-phonemes_eeg.json:1)
+- [sub-P01_ses-01_task-phonemes_eeg.json](/Users/samxie/Research/EEG-Voice/openneuro_downloads/ds006104-download/sub-P01/ses-01/eeg/sub-P01_ses-01_task-phonemes_eeg.json)
 
 示例片段：
 
@@ -521,7 +496,7 @@ F3    EEG   uV
 }
 ```
 
-这告诉你：
+对应信息包括：
 
 - 当前任务是 `phonemes`
 - 任务本质是听刺激并按键反应
@@ -550,7 +525,7 @@ F3    EEG   uV
 
 含义：
 
-- 告诉你有哪些参与者
+- 列出参与者
 - 哪些人属于 `Study 1`
 - 哪些人属于 `Study 2`
 
@@ -559,7 +534,7 @@ F3    EEG   uV
 来自：
 
 - `events_information/*_Tab.csv`
-- 标准化结果见 [local_events_manifest.csv](/Users/samxie/Research/EEG-Voice/ref_github/speech_decoding/exploration_outputs/tables/local_events_manifest.csv:1)
+- 标准化结果见 [local_events_manifest.csv](/Users/samxie/Research/EEG-Voice/ref_github/speech_decoding/exploration_outputs/tables/local_events_manifest.csv)
 
 这些字段在后面很重要：
 
@@ -577,7 +552,7 @@ F3    EEG   uV
 
 ## 8. 当前本地数据状态与 EDF 完整导出
 
-### 8.1 现在本地已经有什么
+### 8.1 当前本地数据状态
 
 当前工作区已经不只是 sidecar 了。
 
@@ -586,10 +561,6 @@ F3    EEG   uV
 - 原始 EDF 已经成功 hydrated
 - 描述性 EDF 分析已经完成
 - 完整 HDF5 导出已经完成
-
-完整导出批量摘要：
-
-- [batch_full_export_summary.json](/Users/samxie/Research/EEG-Voice/ref_github/speech_decoding/exploration_outputs/edf_full_analysis/batch_full_export_summary.json:1)
 
 其中当前记录是：
 
@@ -617,7 +588,7 @@ F3    EEG   uV
 
 ### 8.3 当前完整导出结果是什么
 
-单个记录目录下现在还有：
+单个记录目录下当前包含：
 
 - `*_full_eeg.h5`
 - `*_full_export_manifest.json`
@@ -625,7 +596,7 @@ F3    EEG   uV
 例如：
 
 - [sub-P01_ses-01_task-phonemes_eeg_full_eeg.h5](/Users/samxie/Research/EEG-Voice/ref_github/speech_decoding/exploration_outputs/edf_full_analysis/sub-P01_ses-01_task-phonemes_eeg/sub-P01_ses-01_task-phonemes_eeg_full_eeg.h5)
-- [sub-P01_ses-01_task-phonemes_eeg_full_export_manifest.json](/Users/samxie/Research/EEG-Voice/ref_github/speech_decoding/exploration_outputs/edf_full_analysis/sub-P01_ses-01_task-phonemes_eeg/sub-P01_ses-01_task-phonemes_eeg_full_export_manifest.json:1)
+- [sub-P01_ses-01_task-phonemes_eeg_full_export_manifest.json](/Users/samxie/Research/EEG-Voice/ref_github/speech_decoding/exploration_outputs/edf_full_analysis/sub-P01_ses-01_task-phonemes_eeg/sub-P01_ses-01_task-phonemes_eeg_full_export_manifest.json)
 
 manifest 关键信息示例：
 
@@ -640,7 +611,7 @@ manifest 关键信息示例：
 }
 ```
 
-怎么理解：
+解释：
 
 - EDF 总共有 `62` 个通道
 - 其中 `61` 个是真正 EEG
@@ -659,9 +630,9 @@ manifest 关键信息示例：
 - 时长
 - 全局统计量
 
-真实示例：
+示例文件名：
 
-- [sub-P01_ses-01_task-phonemes_eeg_summary.json](/Users/samxie/Research/EEG-Voice/ref_github/speech_decoding/exploration_outputs/edf_full_analysis/sub-P01_ses-01_task-phonemes_eeg/sub-P01_ses-01_task-phonemes_eeg_summary.json:1)
+- `sub-P01_ses-01_task-phonemes_eeg_summary.json`
 
 #### `*_full_eeg.h5`
 
@@ -669,8 +640,8 @@ manifest 关键信息示例：
 
 一句话区分：
 
-- `summary.json` 是体检报告
-- `full_eeg.h5` 是病人本人
+- `summary.json` 属于摘要层
+- `full_eeg.h5` 属于完整矩阵层
 
 ### 8.5 当前目录中各类文件分别是什么
 
@@ -729,9 +700,9 @@ manifest 关键信息示例：
 含义：
 
 - 不同任务不能简单混成统一条件空间
-- 模型和分析应该按任务拆开解释
+- 模型与分析需要按任务拆开解释
 
-### 9.3 `single-phoneme` 是最干净的起点
+### 9.3 `single-phoneme` 是结构最清晰的起点
 
 关键结论：
 
@@ -743,10 +714,10 @@ manifest 关键信息示例：
 
 这使它成为：
 
-- 最适合做离散 speech-unit 起点的数据子集
-- 最适合先做 EEG token 是否可分的验证集
+- 适合作为离散 speech-unit 的起点子集
+- 适合用于验证 EEG token 的可分性
 
-### 9.4 `Words` 最适合高层 lexical unit
+### 9.4 `Words` 对应较高层 lexical unit
 
 关键结论：
 
@@ -778,8 +749,8 @@ manifest 关键信息示例：
 
 含义：
 
-- `single-phoneme` 任务不能偷懒用固定偏移替代真实 onset
-- 以后做 epoch，必须用真实 recorded onset
+- `single-phoneme` 任务不宜用固定偏移替代真实 onset
+- 后续 epoch 仍需使用真实 recorded onset
 
 图表：
 
@@ -808,8 +779,8 @@ manifest 关键信息示例：
 
 当前最重要的边界判断见：
 
-- [alignment_granularity.csv](/Users/samxie/Research/EEG-Voice/ref_github/speech_decoding/exploration_outputs/data_priority/tables/alignment_granularity.csv:1)
-- [supervision_signal_matrix.csv](/Users/samxie/Research/EEG-Voice/ref_github/speech_decoding/exploration_outputs/data_priority/tables/supervision_signal_matrix.csv:1)
+- [alignment_granularity.csv](/Users/samxie/Research/EEG-Voice/ref_github/speech_decoding/exploration_outputs/data_priority/tables/alignment_granularity.csv)
+- [supervision_signal_matrix.csv](/Users/samxie/Research/EEG-Voice/ref_github/speech_decoding/exploration_outputs/data_priority/tables/supervision_signal_matrix.csv)
 
 ### 10.1 当前能做的
 
@@ -844,28 +815,28 @@ manifest 关键信息示例：
 
 `Lee 2023 式 EEG-to-voice reconstruction`
 
-## 11. 子集优先级与推荐研究顺序
+## 11. 子集优先级与研究顺序
 
 优先级表：
 
-- [candidate_subset_priority.csv](/Users/samxie/Research/EEG-Voice/ref_github/speech_decoding/exploration_outputs/data_priority/tables/candidate_subset_priority.csv:1)
+- [candidate_subset_priority.csv](/Users/samxie/Research/EEG-Voice/ref_github/speech_decoding/exploration_outputs/data_priority/tables/candidate_subset_priority.csv)
 
-推荐顺序如下。
+按当前数据质量和标签结构，可按以下顺序展开。
 
 ### 11.1 第一优先级：`2021 single-phoneme`
 
 原因：
 
-- 最干净
-- 最均衡
+- 结构最清晰
+- 类别最均衡
 - 全部为 control 条件
-- 最适合先看 EEG token 是否可分
+- 适合首先检验 EEG token 的可分性
 
 ### 11.2 第二优先级：`2021 Words`
 
 原因：
 
-- `real / nonce` 很干净
+- `real / nonce` 分布较均衡
 - 更接近高层 lexical unit
 
 限制：
@@ -912,22 +883,22 @@ manifest 关键信息示例：
 
 ### 12.3 最重要的脚本
 
-- [generate_moreira_exploration.py](/Users/samxie/Research/EEG-Voice/ref_github/speech_decoding/scripts/generate_moreira_exploration.py:1)
+- [generate_moreira_exploration.py](/Users/samxie/Research/EEG-Voice/ref_github/speech_decoding/scripts/generate_moreira_exploration.py)
   生成数据探索结果
-- [generate_moreira_data_priority.py](/Users/samxie/Research/EEG-Voice/ref_github/speech_decoding/scripts/generate_moreira_data_priority.py:1)
+- [generate_moreira_data_priority.py](/Users/samxie/Research/EEG-Voice/ref_github/speech_decoding/scripts/generate_moreira_data_priority.py)
   生成优先级、监督矩阵、对齐粒度结果
-- [analyze_ds006104_bids.py](/Users/samxie/Research/EEG-Voice/ref_github/speech_decoding/scripts/analyze_ds006104_bids.py:1)
+- [analyze_ds006104_bids.py](/Users/samxie/Research/EEG-Voice/ref_github/speech_decoding/scripts/analyze_ds006104_bids.py)
   BIDS 事件级分析
-- [read_edf_full_analysis.py](/Users/samxie/Research/EEG-Voice/ref_github/speech_decoding/scripts/read_edf_full_analysis.py:1)
+- [read_edf_full_analysis.py](/Users/samxie/Research/EEG-Voice/ref_github/speech_decoding/scripts/read_edf_full_analysis.py)
   EDF 描述性分析
-- [export_edf_full_data.py](/Users/samxie/Research/EEG-Voice/ref_github/speech_decoding/scripts/export_edf_full_data.py:1)
+- [export_edf_full_data.py](/Users/samxie/Research/EEG-Voice/ref_github/speech_decoding/scripts/export_edf_full_data.py)
   EDF 完整 HDF5 导出
 
-## 13. EEG token / speech token 研究路线
+## 13. EEG token / speech token 研究路径
 
-### 13.1 正确的目标是什么
+### 13.1 研究目标
 
-当前最稳的目标不是：
+当前更稳妥的目标不是：
 
 - `EEG -> mel`
 - `EEG -> waveform`
@@ -936,15 +907,15 @@ manifest 关键信息示例：
 
 `弱监督 speech-unit EEG token 学习`
 
-### 13.2 这篇文章应该回答什么问题
+### 13.2 核心研究问题
 
-建议压缩成 3 个问题：
+研究问题可压缩为 3 个方面：
 
 1. EEG 里能不能学出稳定的 speech-unit token
 2. 这些 token 能不能和 speech-side token 对齐
 3. 这些 token 能不能跨被试、跨年份泛化
 
-### 13.3 建议的实现顺序
+### 13.3 实现顺序
 
 #### 第一阶段：统一 epoch 数据集
 
@@ -960,11 +931,11 @@ manifest 关键信息示例：
 
 #### 第二阶段：连续 EEG embedding
 
-先学连续表征，不要一开始就硬做离散量化。
+首版可先学习连续表征，离散量化放在后一步处理。
 
 #### 第三阶段：EEG token 化
 
-推荐第一版用：
+首版可采用：
 
 - encoder 提 embedding
 - 训练集上做 `k-means`
@@ -972,7 +943,7 @@ manifest 关键信息示例：
 
 #### 第四阶段：speech-side token 定义
 
-当前阶段建议使用符号 token，而不是音频 tokenizer：
+当前阶段更适合使用符号 token，而不是音频 tokenizer：
 
 - `single-phoneme`: `phoneme1`
 - `phonemes`: `[phoneme1, phoneme2]`
@@ -980,17 +951,17 @@ manifest 关键信息示例：
 
 #### 第五阶段：弱监督对齐
 
-当前最适合的方法是：
+与当前数据结构更匹配的方法是：
 
 - `CTC`
 
-因为你的结构天然是：
+原因在于当前数据结构具有以下特点：
 
 - 输入：长度较长的 EEG sequence
 - 输出：长度较短的 speech token sequence
 - 对齐未知但单调
 
-### 13.4 推荐的训练范式
+### 13.4 训练范式
 
 #### 阶段 A：表征预训练
 
@@ -1016,14 +987,14 @@ manifest 关键信息示例：
 - sequence output
 - `CTC + classification + contrastive` 组合损失
 
-### 13.5 推荐 baseline
+### 13.5 baseline
 
 1. bandpower + SVM
 2. EEGNet / shallow convnet
 3. continuous embedding + linear probe
 4. encoder + CTC
 
-### 13.6 推荐评估
+### 13.6 评估指标
 
 - accuracy
 - macro-F1
@@ -1034,7 +1005,7 @@ manifest 关键信息示例：
 - leave-one-subject-out
 - cross-year transfer
 
-### 13.7 当前最合理的实验顺序
+### 13.7 实验顺序
 
 1. `2021 single-phoneme`
 2. `control-only phonemes`
@@ -1042,24 +1013,20 @@ manifest 关键信息示例：
 
 ## 14. 阅读清单与搜索词
 
-### 14.1 最先读的论文
+### 14.1 优先阅读的论文
 
 1. Moreira et al., 2025
    `An open-access EEG dataset for speech decoding: Exploring the role of articulation and coarticulation`
    https://www.nature.com/articles/s41597-025-05187-2
-
 2. Défossez et al., 2023
    `Decoding speech perception from non-invasive brain recordings`
    https://www.nature.com/articles/s42256-023-00714-5
-
 3. Lee et al., 2023
    `Towards Voice Reconstruction from EEG during Imagined Speech`
    https://doi.org/10.1609/aaai.v37i5.25745
-
 4. BENDR, 2021
    `BENDR: Using Transformers and a Contrastive Self-Supervised Learning Task to Learn From Massive Amounts of EEG Data`
    https://www.frontiersin.org/journals/human-neuroscience/articles/10.3389/fnhum.2021.653659/full
-
 5. Graves et al., 2006 / Distill 2017
    `Connectionist temporal classification`
    https://doi.org/10.1145/1143844.1143891
@@ -1077,7 +1044,7 @@ manifest 关键信息示例：
    `Contrastive representation learning with transformers for robust auditory EEG decoding`
    https://www.nature.com/articles/s41598-025-13646-4
 
-### 14.3 推荐检索词
+### 14.3 检索词
 
 #### 数据与任务边界
 
@@ -1122,7 +1089,7 @@ CTC weakly supervised alignment token sequence
 CTC phoneme alignment without boundaries
 ```
 
-### 14.4 当前不建议优先搜的词
+### 14.4 暂不优先的检索词
 
 ```text
 EEG to voice reconstruction
@@ -1132,8 +1099,8 @@ brain to speech waveform
 
 原因是：
 
-- 很容易被带到 imagined speech 或 invasive ECoG 主线
-- 和你当前数据条件不完全匹配
+- 检索结果容易偏向 imagined speech 或 invasive ECoG 主线
+- 与当前数据条件不完全匹配
 
 ## 15. 关键风险、误区与边界提醒
 
@@ -1152,23 +1119,23 @@ brain to speech waveform
 3. 把不同任务强行混训
 4. 把旧报告里某些过时状态当成当前状态
 
-### 15.3 当前最该怎么理解“完整内容”
+### 15.3 对“完整内容”的界定
 
 完整内容不是：
 
 - 多几张全程概览图
 - 多几个通道统计表
 
-真正完整的下一步应该是：
+更接近完整实验链条的是：
 
 `full_eeg.h5 + events.tsv -> stimulus-locked epoch -> trial dataset -> baseline -> EEG token -> speech token 对齐`
 
-## 16. 一句话版行动建议
+## 16. 工作顺序概括
 
-如果你现在要继续推进研究，最自然的顺序是：
+按当前数据条件，后续工作顺序可概括为：
 
-1. 先从 `*_full_eeg.h5` 和 `*_events.tsv` 切出 stimulus-locked epoch
-2. 先在 `2021 single-phoneme` 上做第一版 baseline
-3. 再把 `phonemes` 和 `Words` 接进序列建模与对齐
+1. 基于 `*_full_eeg.h5` 和 `*_events.tsv` 构建 stimulus-locked epoch
+2. 在 `2021 single-phoneme` 上完成第一版 baseline
+3. 将 `phonemes` 和 `Words` 纳入序列建模与对齐
 
-这也是当前项目从“看懂数据”走向“真正可训练实验”的最短路径。
+这对应于当前项目从“看懂数据”走向“可训练实验”的主线。

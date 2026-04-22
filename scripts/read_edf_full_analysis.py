@@ -61,19 +61,48 @@ def log_step(message: str, start_time: float | None = None) -> None:
         print(f"[read_edf_full_analysis] {message} ({elapsed:.1f}s)", flush=True)
 
 
+def _compress_trace_for_overview(
+    trace: np.ndarray,
+    times: np.ndarray,
+    max_bins: int = 4000,
+) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+    if trace.size <= max_bins:
+        return times, trace, trace, trace
+
+    edges = np.linspace(0, trace.size, max_bins + 1, dtype=int)
+    centers = np.empty(max_bins, dtype=float)
+    mins = np.empty(max_bins, dtype=float)
+    maxs = np.empty(max_bins, dtype=float)
+    meds = np.empty(max_bins, dtype=float)
+
+    for idx in range(max_bins):
+        start = edges[idx]
+        stop = edges[idx + 1]
+        segment = trace[start:stop]
+        centers[idx] = times[start + max(0, (stop - start) // 2)]
+        mins[idx] = float(np.nanmin(segment))
+        maxs[idx] = float(np.nanmax(segment))
+        meds[idx] = float(np.nanmedian(segment))
+
+    return centers, mins, maxs, meds
+
+
 def make_overview_plot(data: np.ndarray, times: np.ndarray, names: list[str], path: Path) -> None:
     fig, ax = plt.subplots(figsize=(14, 7))
-    spacing = max(float(np.nanstd(data)) * 8, 100.0)
+    robust_spans = np.nanpercentile(data, 95, axis=1) - np.nanpercentile(data, 5, axis=1)
+    spacing = max(float(np.nanmedian(robust_spans)) * 2.4, 40.0)
     offset = 0.0
     ticks = []
     labels = []
     for idx, name in enumerate(names):
-        ax.plot(times, data[idx] + offset, linewidth=0.7)
+        plot_times, mins, maxs, meds = _compress_trace_for_overview(data[idx], times)
+        ax.fill_between(plot_times, mins + offset, maxs + offset, alpha=0.32, linewidth=0.0, color="#4C78A8")
+        ax.plot(plot_times, meds + offset, linewidth=0.7, color="#1F4E79")
         ticks.append(offset)
         labels.append(name)
         offset += spacing
 
-    ax.set_title("Full Recording Overview")
+    ax.set_title("Full Recording Overview (Envelope)")
     ax.set_xlabel("Time (s)")
     ax.set_ylabel("Channel")
     ax.set_yticks(ticks)
@@ -156,7 +185,7 @@ def analyze_edf(
 
     data_start = time.time()
     log_step("Extracting EEG matrix")
-    data = raw.get_data(picks=eeg_picks)
+    data = raw.get_data(picks=eeg_picks) * 1_000_000.0
     log_step("EEG matrix extracted", data_start)
 
     times = np.arange(data.shape[1]) / sfreq
